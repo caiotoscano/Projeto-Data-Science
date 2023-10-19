@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[12]:
 
 
 #import pandas as pd
@@ -15,7 +14,7 @@
 #print(len(colunas))
 
 
-# In[13]:
+
 
 
 import pandas as pd
