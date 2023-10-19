@@ -43,7 +43,7 @@
 
 # ### Importar Bibliotecas e Bases de Dados
 
-# In[1]:
+
 
 
 import pandas as pd 
@@ -61,7 +61,7 @@ import joblib
 
 # ### Consolidar Base de Dados
 
-# In[2]:
+
 
 
 meses = {'jan': 1, 'fev': 2, 'mar': 3, 'abr': 4, 'mai': 5, 'jun': 6, 'jul': 7, 'ago': 8, 'set': 9, 'out': 10, 'nov': 11, 'dez': 12}
@@ -97,7 +97,7 @@ display(base_airbnb)
 # 
 # - Para isso vamos criar um arquivo em excel com os mil primeiros registros e fazer uma análise qualitativa
 
-# In[3]:
+
 
 
 print(list(base_airbnb.columns))
@@ -106,7 +106,7 @@ print(list(base_airbnb.columns))
 
 # ### Depois da análise qualitativa das colunas, levando em conta os critérios explicados acima, ficamos com as seguintes colunas: 
 
-# In[4]:
+
 
 
 colunas = ['host_response_time','host_response_rate','host_is_superhost','host_listings_count','street','latitude','longitude','property_type','room_type','accommodates','bathrooms','bedrooms','beds','bed_type','amenities','price','security_deposit','cleaning_fee','guests_included','extra_people','minimum_nights','maximum_nights','number_of_reviews','review_scores_rating','review_scores_accuracy','review_scores_cleanliness','review_scores_checkin','review_scores_communication','review_scores_location','review_scores_value','instant_bookable','is_business_travel_ready','cancellation_policy','ano','mes']
@@ -121,7 +121,7 @@ display(base_airbnb)
 # - Visualizando os dados, percebemos que existe uma grande disparidade de dados faltantes. As colunas com mais de 300.000 valores Nan foram excluídas da análise
 # - Para as outras colunas como temos muitos dados (mais de 900.000 linhas) vamos excluir as linhas que contém dados Nan
 
-# In[5]:
+
 
 
 for coluna in base_airbnb:
@@ -131,7 +131,7 @@ for coluna in base_airbnb:
 print(base_airbnb.isnull().sum())
 
 
-# In[6]:
+
 
 
 base_airbnb = base_airbnb.dropna()
@@ -142,7 +142,7 @@ print(base_airbnb.shape)
 
 # ### Verificar Tipos de Dados em cada coluna
 
-# In[7]:
+
 
 
 print(base_airbnb.dtypes)
@@ -152,7 +152,7 @@ print(base_airbnb.iloc[0])
 
 # - Como preço e extra_people estão sendo reconhecida como objeto ao (invés de ser um float) temos que mudar o tipo de variável da coluna 
 
-# In[8]:
+
 
 
 #price 
@@ -171,7 +171,7 @@ base_airbnb['extra_people'] = base_airbnb['extra_people'].astype(np.float32, cop
 print(base_airbnb.dtypes)
 
 
-# In[ ]:
+
 
 
 
@@ -197,7 +197,7 @@ print(base_airbnb.dtypes)
 
 # ### Encoding
 
-# In[9]:
+
 
 
 #print(base_airbnb.corr(numeric_only = True))
@@ -210,7 +210,7 @@ sns.heatmap(base_airbnb.corr(numeric_only = True), annot=True, cmap='Greens')
 # 
 # Vamos definir algumas funções para ajudar na análise de outliers das colunas 
 
-# In[10]:
+
 
 
 def limites(coluna):
@@ -230,13 +230,12 @@ def excluir_outliers(df, nome_coluna):
     
 
 
-# In[11]:
 
 
 print(limites(base_airbnb['price']))
 
 
-# In[12]:
+
 
 
 def diagrama_caixa(coluna):
@@ -260,10 +259,6 @@ def grafico_barra(coluna):
     
 
 
-# ### Price
-# 
-
-# In[13]:
 
 
 diagrama_caixa(base_airbnb['price'])
@@ -272,14 +267,9 @@ histograma(base_airbnb['price'])
 
 # Como estamos construindo um modelo para imóveis comuns, acredito que os valores acima do limite superior serão apenas de imóveis de altíssimo luxo, que não é nosso objetivo principal. Por isso podemos excluir esses outliers.
 
-# In[14]:
-
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'price')
 print(f'{linhas_removidas} linhas removidas') 
-
-
-# In[15]:
 
 
 print(histograma(base_airbnb['price']))
@@ -288,20 +278,19 @@ print(base_airbnb.shape)
 
 # ### Extra People
 
-# In[16]:
+
 
 
 diagrama_caixa(base_airbnb['extra_people'])
 histograma(base_airbnb['extra_people'])
 
 
-# In[17]:
 
 
 histograma(base_airbnb['extra_people'])
 
 
-# In[18]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'extra_people')
@@ -310,7 +299,7 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### host_listings_count    
 
-# In[19]:
+
 
 
 diagrama_caixa(base_airbnb['host_listings_count'])
@@ -319,7 +308,7 @@ grafico_barra(base_airbnb['host_listings_count'])
 
 # Podemos excluir os outliers porque para o objetivo do nosso projeto porque hosts com mais de 6 imóveis no airbnb não atinge o público alvo do objetivo do projeto (imagino que sejam imobiliárias ou profissionais que gerenciam imóveis no airbnb)
 
-# In[20]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'host_listings_count')
@@ -328,14 +317,13 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### accommodates 
 
-# In[21]:
 
 
 diagrama_caixa(base_airbnb['accommodates'])
 grafico_barra(base_airbnb['accommodates'])
 
 
-# In[22]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'accommodates')
@@ -344,7 +332,7 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### bathrooms
 
-# In[23]:
+
 
 
 diagrama_caixa(base_airbnb['bathrooms'])
@@ -353,7 +341,7 @@ sns.barplot(x=base_airbnb['bathrooms'].value_counts().index, y=base_airbnb['bath
            
 
 
-# In[24]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'bathrooms')
@@ -362,7 +350,6 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### bedrooms
 
-# In[25]:
 
 
 diagrama_caixa(base_airbnb['bedrooms'])
@@ -370,7 +357,7 @@ grafico_barra(base_airbnb['bedrooms'])
 
 
 
-# In[26]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'bedrooms')
@@ -379,14 +366,14 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### beds 
 
-# In[27]:
+
 
 
 diagrama_caixa(base_airbnb['beds'])
 grafico_barra(base_airbnb['beds'])
 
 
-# In[28]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'beds')
@@ -395,7 +382,6 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### guests_included  
 
-# In[29]:
 
 
 #diagrama_caixa(base_airbnb['guests_included'])
@@ -406,7 +392,7 @@ sns.barplot(x=base_airbnb['guests_included'].value_counts().index, y=base_airbnb
 
 # Vamos remover essa feature da análise. Parece que os usuários do airbnb usam muito o valor padrão do airbnb como 1 guest included. Isso pode levar o nosso modelo a considerar uma feature que na verdade não é essencial para a definição do preço, por isso me parece melhor excluir a coluna da análise.
 
-# In[30]:
+
 
 
 base_airbnb = base_airbnb.drop('guests_included', axis=1)
@@ -415,14 +401,14 @@ print(base_airbnb.shape)
 
 # ### minimum_nights  
 
-# In[31]:
+
 
 
 diagrama_caixa(base_airbnb['minimum_nights'])
 grafico_barra(base_airbnb['minimum_nights'])
 
 
-# In[32]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'minimum_nights')
@@ -431,14 +417,13 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### maximum_nights
 
-# In[33]:
 
 
 diagrama_caixa(base_airbnb['maximum_nights'])
 grafico_barra(base_airbnb['maximum_nights'])
 
 
-# In[34]:
+
 
 
 base_airbnb = base_airbnb.drop('maximum_nights', axis=1)
@@ -447,14 +432,14 @@ print(base_airbnb.shape)
 
 # ### number_of_reviews
 
-# In[35]:
+
 
 
 diagrama_caixa(base_airbnb['number_of_reviews'])
 grafico_barra(base_airbnb['number_of_reviews'])
 
 
-# In[36]:
+
 
 
 base_airbnb = base_airbnb.drop('number_of_reviews', axis=1)
@@ -465,7 +450,7 @@ print(base_airbnb.shape)
 
 # ### property_type
 
-# In[37]:
+
 
 
 print(base_airbnb['property_type'].value_counts())
@@ -475,7 +460,6 @@ grafico_property_type = sns.countplot(x=base_airbnb['property_type'])
 grafico_property_type.tick_params(axis = 'x', rotation = 90)
 
 
-# In[38]:
 
 
 tabela_tipos_casa = base_airbnb['property_type'].value_counts()
@@ -499,7 +483,7 @@ grafico_property_type.tick_params(axis = 'x', rotation = 90)
 
 # ### room_type
 
-# In[39]:
+
 
 
 print(base_airbnb['room_type'].value_counts())
@@ -511,7 +495,7 @@ grafico_property_type.tick_params(axis = 'x', rotation = 90)
 
 # ### bed_type
 
-# In[40]:
+
 
 
 print(base_airbnb['bed_type'].value_counts())
@@ -547,7 +531,7 @@ grafico_property_type.tick_params(axis = 'x', rotation = 90)
 
 # ### cancellation_policy
 
-# In[41]:
+
 
 
 print(base_airbnb['cancellation_policy'].value_counts())
@@ -581,7 +565,7 @@ grafico_property_type.tick_params(axis = 'x', rotation = 90)
 # ### amenities
 # Como temos uma diversidade muito grande de amenities e às vezes, as mesmas podem ser escritas de forma diferente vamos avaliar a quantidade de amenities como parâmetro para o nosso modelo.  
 
-# In[42]:
+
 
 
 print(base_airbnb['amenities'].iloc[1].split(','))
@@ -590,21 +574,20 @@ print(len(base_airbnb['amenities'].iloc[1].split(',')))
 base_airbnb['numero_amenities'] = base_airbnb['amenities'].str.split(',').apply(len)
 
 
-# In[43]:
 
 
 base_airbnb = base_airbnb.drop('amenities', axis=1)
 print(base_airbnb.shape)
 
 
-# In[44]:
+
 
 
 diagrama_caixa(base_airbnb['numero_amenities'])
 grafico_barra(base_airbnb['numero_amenities'])
 
 
-# In[45]:
+
 
 
 base_airbnb, linhas_removidas = excluir_outliers(base_airbnb, 'numero_amenities')
@@ -613,7 +596,7 @@ print(f'{linhas_removidas} linhas removidas')
 
 # ### Visualização de mapa das propriedades 
 
-# In[46]:
+
 
 
 amostra = base_airbnb.sample(n=50000)
@@ -631,7 +614,7 @@ mapa.show()
 # - Features de valores True or False, vamos substituir True por 1 e False por 0
 # - Features de categoria (features em que os valores da coluna são texto) vamos utilizar o método de encoding de variáveis dummies
 
-# In[47]:
+
 
 
 colunas_tf = ['host_is_superhost', 'instant_bookable', 'is_business_travel_ready']
@@ -643,7 +626,7 @@ for coluna in colunas_tf:
 print(base_airbnb_cod.iloc[0])
 
 
-# In[48]:
+
 
 
 colunas_categorias = ['property_type', 'room_type', 'bed_type', 'cancellation_policy']
@@ -656,7 +639,7 @@ display(base_airbnb_cod.head())
 
 #  - Métricas de Avaliação
 
-# In[49]:
+
 
 
 def avaliar_modelo(nome_modelo, y_teste, previsao):
@@ -673,7 +656,7 @@ def avaliar_modelo(nome_modelo, y_teste, previsao):
 # 
 # 
 
-# In[52]:
+
 
 
 modelo_rf = RandomForestRegressor()
@@ -691,7 +674,6 @@ x = base_airbnb_cod.drop('price', axis=1)
 
 # - Separar os dados em treino e teste + Treino do Modelo
 
-# In[53]:
 
 
 x_treino, x_teste, y_treino, y_teste = train_test_split(x, y, random_state = 10)
@@ -729,7 +711,7 @@ for nome_modelo, modelo in modelos.items():
 
 # ### Ajustes e Melhorias no Melhor Modelo
 
-# In[54]:
+
 
 
 print(modelo_et.feature_importances_)
@@ -746,7 +728,7 @@ ax.tick_params(axis='x', rotation=90)
 # ### Ajustes Finais do Modelo
 # - is_business_travel não parece ter muito impacto no nosso modelo. Por isso, para chegar em um modelo mais simples vamos excluir essa feature e testar o modelo sem ela.
 
-# In[55]:
+
 
 
 base_airbnb_cod = base_airbnb_cod.drop('is_business_travel_ready', axis=1)
@@ -765,7 +747,7 @@ print(avaliar_modelo('ExtraTrees', y_teste, previsao))
 
 
 
-# In[56]:
+
 
 
 base_teste = base_airbnb_cod.copy()
@@ -783,7 +765,7 @@ previsao = modelo_et.predict(X_test)
 print(avaliar_modelo('ExtraTrees', y_test, previsao))
 
 
-# In[57]:
+
 
 
 print(previsao)
@@ -801,14 +783,13 @@ print(previsao)
 # - Passo 5 -> Atribuir ao botão o carregamento do modelo
 # - Passo 6 -> Deploy feito
 
-# In[58]:
+
 
 
 x['price'] = y
 x.to_csv('dados_tratados.csv')
 
 
-# In[59]:
 
 
 joblib.dump(modelo_et, 'modelo.joblib')
